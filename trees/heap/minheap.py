@@ -31,7 +31,7 @@ class MinHeap:
             # 4. Reorganizar la wea 
             self._heapify_down(1)
 
-            return last_item
+            return root
 
 
     def _heapify_up(self, index):
@@ -40,19 +40,28 @@ class MinHeap:
             index = index // 2
 
     def _heapify_down(self, index):
-        left_index = 2 * index
-        right_index = 2 * index + 1
 
-        left_son = self.heap[left_index] if left_index < len(self.heap) else None
-        right_son = self.heap[right_index] if right_index < len(self.heap) else None
+        while 2 * index  < len(self.heap):
+            left_index = 2 * index
+            right_index = 2 * index + 1
 
+            # Asumimos que el pequeño es el izquierdo
+            smaller_ind = left_index
 
-        
+            if right_index < len(self.heap) and self.heap[right_index] < self.heap[left_index]:
+                smaller_ind = right_index
 
-
+            if self.heap[index] > self.heap[smaller_ind]:
+                self.heap[index], self.heap[smaller_ind] = self.heap[smaller_ind], self.heap[index]
+                index = smaller_ind
+            else:
+                break
 
     def peek(self):
-        pass
+        if len(self.heap) <= 1:
+            return None
+        else:
+            return self.heap[1]
 
 
     def __repr__(self):
@@ -83,8 +92,9 @@ class MinHeap:
         return "\n".join(build_lines(1))
 
 minheap = MinHeap()
+heap = [1, 3, 5, 10, 8, 12, 7]
 
-for v in [10, 5, 8, 1]:
+for v in heap:
     minheap.insert(v)
 
 print(minheap)
@@ -96,3 +106,5 @@ print("Min:  ", minheap.extract_min())
 print()
 
 print(minheap)
+
+print(minheap.peek())
